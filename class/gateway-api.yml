@@ -1,5 +1,9 @@
 parameters:
   kapitan:
+    dependencies:
+      - type: https
+        source: ${gateway_api:source}
+        output_path: ${_base_directory}/manifests/gateway-api/install.yaml
     compile:
       - input_paths:
           - ${_base_directory}/component/app.jsonnet

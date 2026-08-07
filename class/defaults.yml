@@ -3,3 +3,8 @@ parameters:
     =_metadata:
       multi_tenant: true
     namespace: syn-gateway-api
+
+    enabled: true
+    channel: standard
+    version: v1.6.1
+    source: https://github.com/kubernetes-sigs/gateway-api/releases/download/${gateway_api:version}/${gateway_api:channel}-install.yaml
