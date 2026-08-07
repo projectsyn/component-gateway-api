@@ -1,0 +1,5 @@
+= Gateway API
+
+gateway-api is a Commodore component to manage Gateway API.
+
+See the xref:references/parameters.adoc[parameters] reference for further details.
