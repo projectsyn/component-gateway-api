@@ -1,0 +1,46 @@
+= Component library
+
+The component provides a component library (`lib/gateway-api.libsonnet`) with helper functions for other components which deploy Gateway API resources.
+
+The library is available to other components when this component is included in the cluster's applications.
+
+== Helper functions
+
+[horizontal]
+`GatewayClass(name)`:: Creates a `GatewayClass` in API version `gateway.networking.k8s.io/v1`.
+`Gateway(name)`:: Creates a `Gateway` in API version `gateway.networking.k8s.io/v1`.
+`HTTPRoute(name)`:: Creates an `HTTPRoute` in API version `gateway.networking.k8s.io/v1`.
+`ReferenceGrant(name)`:: Creates a `ReferenceGrant` in API version `gateway.networking.k8s.io/v1beta1`.
+
+Each helper takes the resource name as its only argument and returns a partial resource containing `apiVersion`, `kind` and `metadata`.
+Merge `metadata` and `spec` into the result as needed.
+The returned resources carry the `argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true` annotation, so that ArgoCD doesn't fail a consumer's sync when the Gateway API CRDs aren't installed yet.
+
+== Constants
+
+[horizontal]
+`gatewayApiGroup`:: The API group `gateway.networking.k8s.io`.
+`gatewayApiExperimentalGroup`:: The API group `gateway.networking.x-k8s.io` used by experimental-channel-only resources.
+
+== Example
+
+[source,jsonnet]
+----
+local gw = import 'lib/gateway-api.libsonnet';
+
+{
+  '10_gateway': gw.Gateway('my-gateway') {
+    metadata+: {
+      namespace: 'my-namespace',
+    },
+    spec: {
+      gatewayClassName: 'my-class',
+      listeners: [ {
+        name: 'http',
+        port: 80,
+        protocol: 'HTTP',
+      } ],
+    },
+  },
+}
+----

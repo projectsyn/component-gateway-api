@@ -6,7 +6,7 @@ The component is the single owner of the cluster-scoped `gateway.networking.k8s.
 Since Gateway API v1.5, the upstream release additionally ships the `safe-upgrades` validating admission policy, which the component installs alongside the CRDs.
 Gateway API implementation components (for example kgateway or Airlock Microgateway) don't have to install these CRDs themselves. Instead add this component to the cluster's applications next to the implementation.
 
-The component also provides a component library (`lib/gateway-api.libsonnet`) with generic builder helpers (GatewayClass, Gateway, HTTPRoute, ReferenceGrant) for components which deploy Gateway API resources.
+The component also provides a xref:references/library.adoc[component library] (`lib/gateway-api.libsonnet`) with generic builder helpers (GatewayClass, Gateway, HTTPRoute, ReferenceGrant) for components which deploy Gateway API resources.
 
 [NOTE]
 ====

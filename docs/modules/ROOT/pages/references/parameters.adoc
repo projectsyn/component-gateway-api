@@ -2,16 +2,6 @@
 
 The parent key for all of the following parameters is `gateway_api`.
 
-== `namespace`
-
-[horizontal]
-type:: string
-default:: `syn-gateway-api`
-
-The namespace in which to deploy this component.
-
-NOTE: The Gateway API CRDs are cluster-scoped. The namespace only holds the ArgoCD app.
-
 == `enabled`
 
 [horizontal]
@@ -20,7 +10,8 @@ default:: `true`
 
 Whether to install the upstream Gateway API CRDs and accompanying non-CRD objects from the upstream release manifest (such as the `safe-upgrades` ValidatingAdmissionPolicy shipped since v1.5).
 
-Set this to `false` on clusters where the platform already ships the CRDs (for example OpenShift 4.19+), while keeping the component in the cluster's applications so the component library stays available to other components.
+This parameter must be set to `false` on clusters where the platform already ships the CRDs (for example OpenShift 4.19+).
+It enables users to still include the component on such platforms to enable other components to unconditionally use the `gateway-api.libsonnet` provided by the component.
 
 == `channel`
 
@@ -51,47 +42,6 @@ default:: `https://github.com/kubernetes-sigs/gateway-api/releases/download/${ga
 
 The URL from which to download the Gateway API CRD manifests.
 Usually there's no need to override this.
-
-== Component library
-
-The component provides a component library (`lib/gateway-api.libsonnet`) with helper functions for other components which deploy Gateway API resources.
-
-The library provides the following helper functions:
-
-[horizontal]
-`GatewayClass(name)`:: Creates a `GatewayClass` in API version `gateway.networking.k8s.io/v1`.
-`Gateway(name)`:: Creates a `Gateway` in API version `gateway.networking.k8s.io/v1`.
-`HTTPRoute(name)`:: Creates an `HTTPRoute` in API version `gateway.networking.k8s.io/v1`.
-`ReferenceGrant(name)`:: Creates a `ReferenceGrant` in API version `gateway.networking.k8s.io/v1beta1`.
-
-Each helper takes the resource name as its only argument and returns a partial resource containing `apiVersion`, `kind` and `metadata`.
-Merge `metadata` and `spec` into the result as needed.
-The returned resources carry the `argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true` annotation, so that ArgoCD doesn't fail a consumer's sync when the Gateway API CRDs aren't installed yet.
-
-The library also exports two constants: `gatewayApiGroup` contains the API group `gateway.networking.k8s.io`, and `gatewayApiExperimentalGroup` contains the API group `gateway.networking.x-k8s.io` used by experimental-channel-only resources.
-
-[source,jsonnet]
-----
-local gw = import 'lib/gateway-api.libsonnet';
-
-{
-  '10_gateway': gw.Gateway('my-gateway') {
-    metadata+: {
-      namespace: 'my-namespace',
-    },
-    spec: {
-      gatewayClassName: 'my-class',
-      listeners: [ {
-        name: 'http',
-        port: 80,
-        protocol: 'HTTP',
-      } ],
-    },
-  },
-}
-----
-
-The library is available to other components when this component is included in the cluster's applications.
 
 == Example
 

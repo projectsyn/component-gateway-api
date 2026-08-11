@@ -2,7 +2,6 @@ parameters:
   gateway_api:
     =_metadata:
       multi_tenant: true
-    namespace: syn-gateway-api
 
     enabled: true
     channel: standard

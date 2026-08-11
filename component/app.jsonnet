@@ -3,7 +3,7 @@ local inv = kap.inventory();
 local params = inv.parameters.gateway_api;
 local argocd = import 'lib/argocd.libjsonnet';
 
-local app = argocd.App('gateway-api', params.namespace) {
+local app = argocd.App('gateway-api', 'default') {
   spec+: {
     syncPolicy+: {
       syncOptions+: [
