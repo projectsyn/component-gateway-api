@@ -14,4 +14,15 @@ On OpenShift 4.19+ the cluster ingress operator installs the Gateway API CRDs (s
 On such clusters, keep the component in the cluster's applications (so the component library stays available) but set `enabled: false` to skip installing the CRDs and the `safe-upgrades` validating admission policy.
 ====
 
+== Aggregated RBAC
+
+The component always deploys the ClusterRoles `networking-gatewayapi-aggregated-view`, `networking-gatewayapi-aggregated-edit` and `networking-gatewayapi-aggregated-admin`, which aggregate Gateway API access to the default user-facing `view`, `edit` and `admin` cluster roles.
+The view role additionally aggregates to the `cluster-reader` cluster role.
+
+The resource rules are derived from the CRDs of the configured Gateway API version and channel.
+Cluster-scoped Gateway API resources (such as `GatewayClass`) remain read-only in all three roles, including `edit` and `admin`, since namespace editors should not be able to modify a cluster-scoped resource.
+
+NOTE: The aggregated RBAC is deployed independently of `enabled`, since the roles are also wanted on clusters where the platform ships the Gateway API CRDs.
+On such clusters, set `version` and `channel` to the platform's Gateway API version so the derived rules match the installed CRDs.
+
 See the xref:references/parameters.adoc[parameters] reference for further details.
