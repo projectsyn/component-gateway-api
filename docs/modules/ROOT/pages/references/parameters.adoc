@@ -68,7 +68,7 @@ Each helper takes the resource name as its only argument and returns a partial r
 Merge `metadata` and `spec` into the result as needed.
 The returned resources carry the `argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true` annotation, so that ArgoCD doesn't fail a consumer's sync when the Gateway API CRDs aren't installed yet.
 
-The library also exports the constant `gatewayApiGroup`, which contains the API group `gateway.networking.k8s.io`.
+The library also exports two constants: `gatewayApiGroup` contains the API group `gateway.networking.k8s.io`, and `gatewayApiExperimentalGroup` contains the API group `gateway.networking.x-k8s.io` used by experimental-channel-only resources.
 
 [source,jsonnet]
 ----

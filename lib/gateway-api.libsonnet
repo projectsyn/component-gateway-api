@@ -8,6 +8,12 @@
 local gateway_group = 'gateway.networking.k8s.io';
 
 /**
+ * The Experimental Gateway API K8s API group
+ * Only present on clusters which install the experimental channel
+ */
+local gateway_experimental_group = 'gateway.networking.x-k8s.io';
+
+/**
  * Helper function to create Gateway API GatewayClass resources
  *
  * \arg name used as `metadata.name`
@@ -82,4 +88,5 @@ local ReferenceGrant = function(name='') {
   ReferenceGrant: ReferenceGrant,
 
   gatewayApiGroup: gateway_group,
+  gatewayApiExperimentalGroup: gateway_experimental_group,
 }
