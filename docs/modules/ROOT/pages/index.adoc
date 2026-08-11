@@ -1,5 +1,17 @@
-= Gateway API
+= gateway-api
 
-gateway-api is a Commodore component to manage Gateway API.
+gateway-api is a Commodore component managing the upstream https://gateway-api.sigs.k8s.io/[Kubernetes Gateway API] CRDs.
+
+The component is the single owner of the cluster-scoped `gateway.networking.k8s.io` CRDs.
+Since Gateway API v1.5, the upstream release additionally ships the `safe-upgrades` validating admission policy, which the component installs alongside the CRDs.
+Gateway API implementation components (for example kgateway or Airlock Microgateway) don't have to install these CRDs themselves. Instead add this component to the cluster's applications next to the implementation.
+
+The component also provides a component library (`lib/gateway-api.libsonnet`) with generic builder helpers (GatewayClass, Gateway, HTTPRoute, ReferenceGrant) for components which deploy Gateway API resources.
+
+[NOTE]
+====
+On OpenShift 4.19+ the cluster ingress operator installs the Gateway API CRDs (standard channel).
+On such clusters, keep the component in the cluster's applications (so the component library stays available) but set `enabled: false` to skip installing the CRDs and the `safe-upgrades` validating admission policy.
+====
 
 See the xref:references/parameters.adoc[parameters] reference for further details.

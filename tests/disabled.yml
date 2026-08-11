@@ -1,0 +1,3 @@
+parameters:
+  gateway_api:
+    enabled: false
