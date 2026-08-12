@@ -1,0 +1,12 @@
+parameters:
+  facts:
+    distribution: openshift4
+
+  dynamic_facts:
+    openshiftVersion:
+      Major: '4'
+      Minor: '19'
+
+  gateway_api:
+    channel: standard
+    version: v1.2.1

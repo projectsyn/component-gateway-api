@@ -20,13 +20,29 @@ local gateway_crds =
 local gateway_policies =
   std.filter(function(doc) doc.kind != 'CustomResourceDefinition', gateway_docs);
 
+local is_openshift_419_or_higher =
+  std.member([ 'openshift4', 'oke' ], inv.parameters.facts.distribution) &&
+  std.parseInt(
+    std.get(
+      std.get(
+        inv.parameters,
+        'dynamic_facts',
+        {}
+      ),
+      'openshiftVersion',
+      { Minor: '0' }
+    ).Minor
+  ) >= 19;
+
 if params.enabled then
   {
     ['10_gateway_api_crds/' + crd.metadata.name]: crd
     for crd in gateway_crds
+    if !is_openshift_419_or_higher
   } + {
     ['20_gateway_api_policies/%s_%s' % [ std.asciiLower(doc.kind), doc.metadata.name ]]: doc
     for doc in gateway_policies
+    if !is_openshift_419_or_higher
   }
 else
   {}
