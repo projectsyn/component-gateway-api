@@ -7,3 +7,7 @@ parameters:
     channel: standard
     version: v1.6.1
     source: https://github.com/kubernetes-sigs/gateway-api/releases/download/${gateway_api:version}/${gateway_api:channel}-install.yaml
+
+    openshift_version:
+      Major: '4'
+      Minor: '19'

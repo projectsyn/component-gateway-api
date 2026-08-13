@@ -22,17 +22,7 @@ local gateway_policies =
 
 local is_openshift_419_or_higher =
   std.member([ 'openshift4', 'oke' ], inv.parameters.facts.distribution) &&
-  std.parseInt(
-    std.get(
-      std.get(
-        inv.parameters,
-        'dynamic_facts',
-        {}
-      ),
-      'openshiftVersion',
-      { Minor: '0' }
-    ).Minor
-  ) >= 19;
+  std.parseInt(params.openshift_version.Minor) >= 19;
 
 if params.enabled then
   {

@@ -43,6 +43,15 @@ default:: `https://github.com/kubernetes-sigs/gateway-api/releases/download/${ga
 The URL from which to download the Gateway API CRD manifests.
 Usually there's no need to override this.
 
+== `openshift_version`
+
+[horizontal]
+type:: dictionary
+default:: `{"Major": "4", "Minor": "19"}`
+
+The OpenShift minor version of the cluster.
+On OpenShift 4.19 or later (detected through this parameter together with the `openshift4` or `oke` distribution fact), the component doesn't install the Gateway API CRDs, since the cluster ingress operator ships and owns them.
+
 == Example
 
 [source,yaml]
