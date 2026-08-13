@@ -37,6 +37,27 @@
         "automerge",
         "bump:patch"
       ]
+    },
+    {
+      "matchDepNames": [
+        "kubernetes-sigs/gateway-api"
+      ],
+      "automerge": false,
+      "labels": [
+        "dependency",
+        "gateway-api-crds"
+      ]
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^class/defaults\\.yml$"],
+      "matchStrings": [
+        "version: (?<currentValue>v\\d+\\.\\d+\\.\\d+)"
+      ],
+      "depNameTemplate": "kubernetes-sigs/gateway-api",
+      "datasourceTemplate": "github-releases"
     }
   ]
 }

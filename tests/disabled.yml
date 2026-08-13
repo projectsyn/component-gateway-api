@@ -1,0 +1,4 @@
+parameters:
+  gateway_api:
+    enabled: false
+    version: v1.3.0

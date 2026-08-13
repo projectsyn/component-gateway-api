@@ -1,5 +1,28 @@
-= Gateway API
+= gateway-api
 
-gateway-api is a Commodore component to manage Gateway API.
+gateway-api is a Commodore component managing the upstream https://gateway-api.sigs.k8s.io/[Kubernetes Gateway API] CRDs.
+
+The component is the single owner of the cluster-scoped `gateway.networking.k8s.io` CRDs.
+Since Gateway API v1.5, the upstream release additionally ships the `safe-upgrades` validating admission policy, which the component installs alongside the CRDs.
+Gateway API implementation components (for example kgateway or Airlock Microgateway) don't have to install these CRDs themselves. Instead add this component to the cluster's applications next to the implementation.
+
+The component also provides a xref:references/library.adoc[component library] (`lib/gateway-api.libsonnet`) with generic builder helpers (GatewayClass, Gateway, HTTPRoute, ReferenceGrant) for components which deploy Gateway API resources.
+
+[NOTE]
+====
+On OpenShift 4.19+ the cluster ingress operator installs the Gateway API CRDs (standard channel).
+On such clusters, keep the component in the cluster's applications (so the component library stays available) but set `enabled: false` to skip installing the CRDs and the `safe-upgrades` validating admission policy.
+====
+
+== Aggregated RBAC
+
+The component always deploys the ClusterRoles `networking-gatewayapi-aggregated-view`, `networking-gatewayapi-aggregated-edit` and `networking-gatewayapi-aggregated-admin`, which aggregate Gateway API access to the default user-facing `view`, `edit` and `admin` cluster roles.
+The view role additionally aggregates to the `cluster-reader` cluster role.
+
+The resource rules are derived from the CRDs of the configured Gateway API version and channel.
+Cluster-scoped Gateway API resources (such as `GatewayClass`) remain read-only in all three roles, including `edit` and `admin`, since namespace editors should not be able to modify a cluster-scoped resource.
+
+NOTE: The aggregated RBAC is deployed independently of `enabled`, since the roles are also wanted on clusters where the platform ships the Gateway API CRDs.
+On such clusters, set `version` and `channel` to the platform's Gateway API version so the derived rules match the installed CRDs.
 
 See the xref:references/parameters.adoc[parameters] reference for further details.

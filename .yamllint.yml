@@ -22,3 +22,5 @@ ignore: |
   manifests/
   vendor/
   compiled/
+  10_gateway_api_crds/
+  20_gateway_api_policies/

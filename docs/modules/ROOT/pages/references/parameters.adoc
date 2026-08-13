@@ -2,18 +2,61 @@
 
 The parent key for all of the following parameters is `gateway_api`.
 
-== `namespace`
+== `enabled`
+
+[horizontal]
+type:: boolean
+default:: `true`
+
+Whether to install the upstream Gateway API CRDs and accompanying non-CRD objects from the upstream release manifest (such as the `safe-upgrades` ValidatingAdmissionPolicy shipped since v1.5).
+
+This parameter must be set to `false` on clusters where the platform already ships the CRDs (for example OpenShift 4.19+).
+It enables users to still include the component on such platforms to enable other components to unconditionally use the `gateway-api.libsonnet` provided by the component.
+
+== `channel`
 
 [horizontal]
 type:: string
-default:: `syn-gateway-api`
+default:: `standard`
 
-The namespace in which to deploy this component.
+The Gateway API https://gateway-api.sigs.k8s.io/concepts/versioning/[release channel] to install.
+Supported values are `standard` and `experimental`.
+The experimental channel is a superset of the standard channel and additionally contains resources from the `gateway.networking.x-k8s.io` group.
 
+NOTE: A cluster has exactly one channel and version.
+If multiple Gateway API implementations with different requirements are deployed on the same cluster, pin `channel` and `version` explicitly in the cluster or tenant configuration.
+
+== `version`
+
+[horizontal]
+type:: string
+default:: `v1.6.1`
+
+The upstream Gateway API version to install.
+
+== `source`
+
+[horizontal]
+type:: string
+default:: `https://github.com/kubernetes-sigs/gateway-api/releases/download/${gateway_api:version}/${gateway_api:channel}-install.yaml`
+
+The URL from which to download the Gateway API CRD manifests.
+Usually there's no need to override this.
+
+== `openshift_version`
+
+[horizontal]
+type:: dictionary
+default:: `{"Major": "4", "Minor": "19"}`
+
+The OpenShift minor version of the cluster.
+On OpenShift 4.19 or later (detected through this parameter together with the `openshift4` or `oke` distribution fact), the component doesn't install the Gateway API CRDs, since the cluster ingress operator ships and owns them.
 
 == Example
 
 [source,yaml]
 ----
-namespace: example-namespace
+gateway_api:
+  channel: experimental
+  version: v1.6.1
 ----
