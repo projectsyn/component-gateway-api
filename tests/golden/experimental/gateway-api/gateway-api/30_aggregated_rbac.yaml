@@ -43,6 +43,7 @@ rules:
     resources:
       - xbackends
       - xbackendtrafficpolicies
+      - xtelemetrypolicies
     verbs:
       - get
       - list
@@ -90,6 +91,7 @@ rules:
     resources:
       - xbackends
       - xbackendtrafficpolicies
+      - xtelemetrypolicies
     verbs:
       - '*'
 ---
@@ -135,5 +137,6 @@ rules:
     resources:
       - xbackends
       - xbackendtrafficpolicies
+      - xtelemetrypolicies
     verbs:
       - '*'
